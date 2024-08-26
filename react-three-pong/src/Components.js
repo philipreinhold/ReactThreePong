@@ -1,28 +1,55 @@
-import React, { useRef, useEffect } from 'react';
-import { useThree } from '@react-three/fiber';
+import React, { useRef, useEffect, useMemo } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 export const Terrain = () => {
   const terrain = useRef();
+  const { clock } = useThree();
+
+  const generateHeight = useMemo(() => {
+    return (x, y) => {
+      const scale = 0.1;
+      return (Math.sin(x * scale) + Math.sin(y * scale)) * 5;
+    };
+  }, []);
 
   useEffect(() => {
     const geometry = terrain.current.geometry;
-    const position = geometry.attributes.position;
+    const positionAttribute = geometry.getAttribute('position');
 
-    for (let i = 0; i < position.count; i++) {
-      const x = position.getX(i);
-      const y = position.getY(i);
-      const z = Math.sin(x / 2) * Math.cos(y / 2) * 2;
-      position.setZ(i, z);
+    for (let i = 0; i < positionAttribute.count; i++) {
+      const x = positionAttribute.getX(i);
+      const y = positionAttribute.getY(i);
+      const z = generateHeight(x, y);
+      positionAttribute.setZ(i, z);
     }
-
-    position.needsUpdate = true;
+    
+    positionAttribute.needsUpdate = true;
     geometry.computeVertexNormals();
-  }, []);
+  }, [generateHeight]);
+
+  useFrame(() => {
+    const geometry = terrain.current.geometry;
+    const positionAttribute = geometry.getAttribute('position');
+    const time = clock.getElapsedTime() * 0.2; // Slowed down the animation
+
+    for (let i = 0; i < positionAttribute.count; i++) {
+      const x = positionAttribute.getX(i);
+      const y = positionAttribute.getY(i);
+      const baseHeight = generateHeight(x, y);
+      const dynamicFactor = Math.sin(time + x * 0.05 + y * 0.05) * 2; // Dynamic height factor
+      const z = baseHeight + dynamicFactor;
+      
+      positionAttribute.setZ(i, z);
+    }
+    
+    positionAttribute.needsUpdate = true;
+    geometry.computeVertexNormals();
+  });
 
   return (
-    <mesh ref={terrain} rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, -10]}>
-      <planeGeometry args={[100, 100, 50, 50]} />
+    <mesh ref={terrain} rotation={[-Math.PI / 2, 113, 10]} position={[0, -15, -50]} scale={[3, 3, 1]}>
+      <planeGeometry args={[100, 100, 100, 100]} />
       <meshBasicMaterial color="#FF4500" wireframe={true} />
     </mesh>
   );
@@ -30,8 +57,8 @@ export const Terrain = () => {
 
 export const Sun = () => {
   return (
-    <mesh position={[0, 10, -50]}>
-      <sphereGeometry args={[5, 32, 32]} />
+    <mesh position={[0, 15, -300]}>
+      <sphereGeometry args={[20, 32, 32]} />
       <meshBasicMaterial color="#FFA500" />
     </mesh>
   );
@@ -42,11 +69,11 @@ export const GameBoundaries = () => {
     <>
       <mesh position={[0, 5.5, 0]}>
         <boxGeometry args={[18, 0.5, 0.5]} />
-        <meshBasicMaterial color="#FFFFFF" wireframe={true} />
+        <meshBasicMaterial color="#008599" wireframe={true} />
       </mesh>
       <mesh position={[0, -5.5, 0]}>
         <boxGeometry args={[18, 0.5, 0.5]} />
-        <meshBasicMaterial color="#FFFFFF" wireframe={true} />
+        <meshBasicMaterial color="#008599" wireframe={true} />
       </mesh>
     </>
   );
@@ -56,7 +83,7 @@ export const PurpleFog = () => {
   const { scene } = useThree();
   
   useEffect(() => {
-    scene.fog = new THREE.FogExp2('#4B0082', 0.02);
+    scene.fog = new THREE.FogExp2('#4B0082', 0.008);
     return () => {
       scene.fog = null;
     };

@@ -1,12 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import useSound from 'use-sound';
+import paddleLeftSound from './assets/sounds/paddle_left.wav';
+import paddleRightSound from './assets/sounds/paddle_right.wav';
 
 const Ball = ({ setLeftScore, setRightScore }) => {
   const ref = useRef();
   const [velocity, setVelocity] = useState([0.1, 0.1, 0]);
   const [reset, setReset] = useState(false);
   const { scene } = useThree();
+
+  const [playPaddleLeftSound] = useSound(paddleLeftSound);
+  const [playPaddleRightSound] = useSound(paddleRightSound);
 
   const resetBall = () => {
     if (ref.current) {
@@ -53,6 +59,7 @@ const Ball = ({ setLeftScore, setRightScore }) => {
         const newAngle = ((ball.position.y - leftPaddle.position.y) / 1) * (Math.PI / 4);
         const speed = Math.sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]) * 1.1;
         setVelocity([Math.abs(Math.cos(newAngle) * speed), Math.sin(newAngle) * speed, 0]);
+        playPaddleLeftSound();
       }
 
       if (
@@ -63,6 +70,7 @@ const Ball = ({ setLeftScore, setRightScore }) => {
         const newAngle = ((ball.position.y - rightPaddle.position.y) / 1) * (Math.PI / 4);
         const speed = Math.sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]) * 1.1;
         setVelocity([-Math.abs(Math.cos(newAngle) * speed), Math.sin(newAngle) * speed, 0]);
+        playPaddleRightSound();
       }
     }
 

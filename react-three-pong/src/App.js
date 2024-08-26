@@ -12,15 +12,12 @@ function ResponsiveCamera() {
   const aspect = size.width / size.height;
 
   useEffect(() => {
-    // Adjust these values to fit your game field
-    const gameWidth = 18;  // Assuming the game field is 18 units wide
-    const gameHeight = 10; // Assuming the game field is 10 units high
+    const gameWidth = 19;
+    const gameHeight = 10.5;
 
     if (aspect > gameWidth / gameHeight) {
-      // Window is wider than the game field
       camera.fov = (2 * Math.atan(gameHeight / (2 * camera.position.z)) * 180) / Math.PI;
     } else {
-      // Window is taller than the game field
       camera.fov = (2 * Math.atan((gameWidth / aspect) / (2 * camera.position.z)) * 180) / Math.PI;
     }
 
@@ -28,11 +25,13 @@ function ResponsiveCamera() {
   }, [size, camera, aspect]);
 
   useFrame(() => {
-    camera.position.set(0, 4, 14);
-    camera.rotation.set(-0.3, 0, 0);
+    // Adjusted camera position and rotation for better terrain view
+    camera.position.set(0, 2, 15);
+    camera.rotation.set(-0.15, 0.0, 0.0);
   });
 
   return null;
+
 }
 
 function App() {
@@ -86,7 +85,7 @@ function App() {
 
             <EffectComposer>
               <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
-              <Vignette eskil={false} offset={0.1} darkness={1.1} />
+              <Vignette eskil={false} offset={0.1} darkness={1.3} />
             </EffectComposer>
           </Canvas>
         </div>
