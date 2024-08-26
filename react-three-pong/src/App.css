@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  background-color: black; /* Schwarzer Hintergrund */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+canvas {
+  width: 700px !important;  /* Begrenze die Breite */
+  height: 500px !important;  /* Begrenze die Höhe */
+}
