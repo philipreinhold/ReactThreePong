@@ -1,41 +1,100 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
-function Ball() {
+const Ball = ({ setLeftScore, setRightScore }) => {
   const ref = useRef();
-  const [direction, setDirection] = useState([0.1, 0.1, 0]);
+  // Ball velocity [x, y, z]
+  const [velocity, setVelocity] = useState([0.1, 0.1, 0]);
+  // Flag to reset ball position
+  const [reset, setReset] = useState(false);
 
-  useFrame(() => {
-    const { position } = ref.current;
-    position.x += direction[0];
-    position.y += direction[1];
+  // Function to reset ball position and set a new random direction
+  const resetBall = () => {
+    ref.current.position.set(0, 0, 0);
+    // Random angle between -45 and 45 degrees
+    const newAngle = (Math.random() - 0.5) * Math.PI / 4;
+    // Initial speed of the ball (adjust for difficulty)
+    const speed = 0.15;
+    // Set new velocity
+    setVelocity([
+      Math.cos(newAngle) * speed * (Math.random() < 0.5 ? 1 : -1),
+      Math.sin(newAngle) * speed,
+      0
+    ]);
+    setReset(false);
+  };
 
-    // Kollision mit den oberen und unteren Wänden
-    if (position.y > 4.5 || position.y < -4.5) {
-      setDirection([direction[0], -direction[1], 0]);
+  // Initial setup
+  useEffect(() => {
+    resetBall();
+  }, []);
+
+  // Game loop
+  useFrame((state) => {
+    if (reset) {
+      resetBall();
+      return;
     }
 
-    // Kollision mit dem linken oder rechten Rand (Punktesystem)
-    if (position.x > 9 || position.x < -9) {
-      setDirection([-direction[0], direction[1], 0]); // Richtung umkehren
+    const ball = ref.current;
+    // Move ball
+    ball.position.x += velocity[0];
+    ball.position.y += velocity[1];
+
+    // Collision with top and bottom walls
+    if (ball.position.y > 4.5 || ball.position.y < -4.5) {
+      setVelocity([velocity[0], -velocity[1], 0]);
     }
 
-    // Kollision mit den Schlägern (vereinfacht)
-    if (position.x < -7.5 && position.y < 3.5 && position.y > -3.5) {
-      setDirection([-direction[0], direction[1], 0]); // Linker Schläger
+    // Get paddle positions
+    const leftPaddle = state.scene.getObjectByName('leftPaddle');
+    const rightPaddle = state.scene.getObjectByName('rightPaddle');
+
+    // Collision with left paddle
+    if (
+      ball.position.x < -7.5 &&
+      ball.position.y < leftPaddle.position.y + 1 &&
+      ball.position.y > leftPaddle.position.y - 1
+    ) {
+      // Calculate new angle based on where ball hits paddle
+      const newAngle = ((ball.position.y - leftPaddle.position.y) / 1) * (Math.PI / 4);
+      // Increase speed slightly with each hit
+      const speed = Math.sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]) * 1.1;
+      setVelocity([Math.cos(newAngle) * speed, Math.sin(newAngle) * speed, 0]);
     }
 
-    if (position.x > 7.5 && position.y < 3.5 && position.y > -3.5) {
-      setDirection([-direction[0], direction[1], 0]); // Rechter Schläger
+    // Collision with right paddle (similar to left paddle)
+    if (
+      ball.position.x > 7.5 &&
+      ball.position.y < rightPaddle.position.y + 1 &&
+      ball.position.y > rightPaddle.position.y - 1
+    ) {
+      const newAngle = ((ball.position.y - rightPaddle.position.y) / 1) * (Math.PI / 4);
+      const speed = Math.sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]) * 1.1;
+      setVelocity([-Math.cos(newAngle) * speed, Math.sin(newAngle) * speed, 0]);
+    }
+
+    // Scoring
+    if (ball.position.x > 9) {
+      setLeftScore(score => score + 1);
+      setReset(true);
+    }
+
+    if (ball.position.x < -9) {
+      setRightScore(score => score + 1);
+      setReset(true);
     }
   });
 
   return (
-    <mesh ref={ref} position={[0, 0, 0]}>
-      <sphereGeometry args={[0.4, 16, 16]} />
-      <meshBasicMaterial color="#FF00FF" wireframe={false} />
+    <mesh ref={ref} position={[0, 0, 0]} name="ball">
+      {/* Ball geometry - adjust size here */}
+      <sphereGeometry args={[0.2, 32, 32]} />
+      {/* Ball material - adjust color and wireframe here */}
+      <meshBasicMaterial color="#FF00FF" wireframe={true} />
     </mesh>
   );
-}
+};
 
 export default Ball;
