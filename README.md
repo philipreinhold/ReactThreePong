@@ -6,7 +6,7 @@ A minimalistic 3D Pong-inspired Web-game built with React and Three.js.
 
 ## About ##
 
-I'm fascinated by 80s graphics and wanted to experiment with Three.js and React. This project is my playground for creating a minimalist game while exploring the interactive possibilities of the Three.js/React combo. Pong is just a starting point - I'm excited to dive deeper into React/Three/Fiber for future projects. It's been a blast experimenting with these technologies!
+I'm a Millenial 8-) and fascinated by 80s graphics and wanted to experiment with Three.js and React. This project is a bit of a playground for creating a minimalist game while exploring the interactive possibilities of the Three.js/React combo. Pong is just a starting point - I'm excited to dive deeper into React/Three/Fiber for future projects. It's a lot of fun experimenting with three and react!
 
 ## Controls ##
 
