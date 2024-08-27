@@ -35,25 +35,25 @@ const GameManager = ({ leftScore, rightScore, onRestart, gameActive, setGameActi
       onClick={onClick}
       style={{
         background: 'transparent',
-        border: '2px solid #0ff',
-        color: '#0ff',
+        border: '2px solid #00FFFF',
+        color: 'transparent',
         padding: '10px 20px',
         fontSize: '24px',
         fontFamily: '"VT323", monospace',
         cursor: 'pointer',
         textTransform: 'uppercase',
-        textShadow: '0 0 5px #0ff',
-        boxShadow: '0 0 5px #0ff',
+        WebkitTextStroke: '1px #00FFFF',
+        boxShadow: '0 0 5px #00FFFF',
         transition: 'all 0.3s ease',
         letterSpacing: '2px',
       }}
       onMouseEnter={(e) => {
-        e.target.style.background = '#0ff';
-        e.target.style.color = '#000';
+        e.target.style.background = '#00FFFF';
+        e.target.style.WebkitTextStroke = '1px #000000';
       }}
       onMouseLeave={(e) => {
         e.target.style.background = 'transparent';
-        e.target.style.color = '#0ff';
+        e.target.style.WebkitTextStroke = '1px #00FFFF';
       }}
     >
       {children}
@@ -72,13 +72,13 @@ const GameManager = ({ leftScore, rightScore, onRestart, gameActive, setGameActi
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        color: '#0ff',
+        color: 'transparent',
         fontFamily: '"VT323", monospace',
-        fontSize: '64px',
-        textShadow: '0 0 5px #0ff',
+        fontSize: '32px',
+        WebkitTextStroke: '1px #00FFFF',
         letterSpacing: '4px',
       }}>
-        <div style={{ marginBottom: '20px' }}>
+        <div style={{ marginBottom: '20px', fontSize: '64px' }}>
           {`${leftScore} - ${rightScore}`}
         </div>
         {gameState === 'start' && (
@@ -87,7 +87,7 @@ const GameManager = ({ leftScore, rightScore, onRestart, gameActive, setGameActi
         {gameState === 'gameOver' && (
           <div style={{ textAlign: 'center' }}>
             <div style={{ marginBottom: '20px', fontSize: '48px' }}>
-              {winner === 'Player 1' ? 'You Win!' : 'Game Over'}
+              {winner === 'Player 1' ? 'WON' : 'GAME OVER'}
             </div>
             <RetroButton onClick={restartGame}>Restart</RetroButton>
           </div>

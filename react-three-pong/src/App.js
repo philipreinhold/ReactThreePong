@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
-import { PerspectiveCamera, OrbitControls, KeyboardControls } from '@react-three/drei';
+import { PerspectiveCamera, KeyboardControls } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import Paddle from './Paddle';
 import Ball from './Ball';
@@ -25,13 +25,12 @@ function ResponsiveCamera() {
   }, [size, camera, aspect]);
 
   useFrame(() => {
-    // Adjusted camera position and rotation for better terrain view
     camera.position.set(0, 2, 15);
-    camera.rotation.set(-0.15, 0.0, 0.0);
+    camera.rotation.set(-0.15, 0, 0);
+    camera.updateProjectionMatrix();
   });
 
   return null;
-
 }
 
 function App() {
@@ -51,44 +50,41 @@ function App() {
         { name: 'down', keys: ['ArrowDown', 's', 'S'] },
       ]}
     >
-      <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'black' }}>
-        <div style={{ width: '100%', height: '100%' }}>
-          <Canvas>
-            <color attach="background" args={['#000000']} />
-            <PerspectiveCamera makeDefault />
-            <ResponsiveCamera />
-            <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
+      <div style={{ width: '800px', height: '600px', margin: '0 auto' }}>
+        <Canvas>
+          <color attach="background" args={['#000000']} />
+          <PerspectiveCamera makeDefault position={[0, 2, 15]} />
+          <ResponsiveCamera />
 
-            <ambientLight intensity={0.2} />
-            <pointLight position={[10, 10, 10]} intensity={1} />
+          <ambientLight intensity={0.2} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
 
-            <PurpleFog />
-            <Terrain />
-            <Sun />
+          <PurpleFog />
+          <Terrain />
+          <Sun />
 
-            <group rotation={[-0.2, 0, 0]}>
-              <Paddle position={[-8, 0, 0]} color="#00FFFF" name="leftPaddle" isPlayer={true} />
-              <Paddle position={[8, 0, 0]} color="#FF00FF" name="rightPaddle" isPlayer={false} />
-              {gameActive && (
-                <Ball setLeftScore={setLeftScore} setRightScore={setRightScore} />
-              )}
-              <GameBoundaries />
-            </group>
+          <group rotation={[-0.2, 0, 0]}>
+            <Paddle position={[-8, 0, 0]} color="#00FFFF" name="leftPaddle" isPlayer={true} />
+            <Paddle position={[8, 0, 0]} color="#FF00FF" name="rightPaddle" isPlayer={false} />
+            {gameActive && (
+              <Ball setLeftScore={setLeftScore} setRightScore={setRightScore} />
+            )}
+            <GameBoundaries />
+          </group>
 
-            <GameManager
-              leftScore={leftScore}
-              rightScore={rightScore}
-              onRestart={restartGame}
-              gameActive={gameActive}
-              setGameActive={setGameActive}
-            />
+          <GameManager
+            leftScore={leftScore}
+            rightScore={rightScore}
+            onRestart={restartGame}
+            gameActive={gameActive}
+            setGameActive={setGameActive}
+          />
 
-            <EffectComposer>
-              <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
-              <Vignette eskil={false} offset={0.1} darkness={1.3} />
-            </EffectComposer>
-          </Canvas>
-        </div>
+          <EffectComposer>
+            <Bloom luminanceThreshold={0.5} luminanceSmoothing={0.9} height={300} />
+            <Vignette eskil={false} offset={0.5} darkness={0.7} />
+          </EffectComposer>
+        </Canvas>
       </div>
     </KeyboardControls>
   );
