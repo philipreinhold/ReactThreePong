@@ -36,3 +36,6 @@ I'm a Millenial 8-) and fascinated by 80s Synthwave graphics and wanted to exper
 6. Open your browser and visit `http://localhost:3000` to play the game.
 
 :-)) 
+
+![Gameplay Screenshot](react-three-pong/src/assets/images/screenshots/gmscr2.png)
+
