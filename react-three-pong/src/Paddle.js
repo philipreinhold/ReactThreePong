@@ -8,7 +8,10 @@ const Paddle = ({ position, color, name, isPlayer }) => {
   const wireframeRef = useRef();
   const [, getKeys] = useKeyboardControls();
 
-  const wireframeGeometry = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.52, 2.02, 0.52)), []);
+  const wireframeGeometry = useMemo(
+    () => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.5, 2, 0.5)),
+    []
+  );
 
   useFrame((state) => {
     if (!ref.current) return;
@@ -42,12 +45,15 @@ const Paddle = ({ position, color, name, isPlayer }) => {
 
   return (
     <group>
+      {/* Transparent filling */}
       <mesh ref={ref} position={position} name={name}>
         <boxGeometry args={[0.5, 2, 0.5]} />
-        <meshBasicMaterial color={color} wireframe={true} />
+        <meshBasicMaterial color={color} transparent={true} opacity={0.2} />
       </mesh>
+
+      {/* Distinct wireframe outlines */}
       <lineSegments ref={wireframeRef} geometry={wireframeGeometry} position={position}>
-        <lineBasicMaterial color={color} linewidth={4} />
+        <lineBasicMaterial color={color} linewidth={2} />
       </lineSegments>
     </group>
   );
