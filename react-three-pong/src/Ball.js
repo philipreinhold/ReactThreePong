@@ -14,6 +14,7 @@ const Ball = ({ setLeftScore, setRightScore }) => {
   const [playPaddleLeftSound] = useSound(paddleLeftSound);
   const [playPaddleRightSound] = useSound(paddleRightSound);
 
+  // how to spawn and respawn the ball, the speed and the direction
   const resetBall = () => {
     if (ref.current) {
       ref.current.position.set(0, 0, 0);
@@ -41,12 +42,12 @@ const Ball = ({ setLeftScore, setRightScore }) => {
     ball.position.x += velocity[0];
     ball.position.y += velocity[1];
 
-    // Collision with top and bottom walls
+    // the collison function for the top and bottom based on the setup or scene boundaries of 4.5 minus 4.5 
     if (ball.position.y > 4.5 || ball.position.y < -4.5) {
       setVelocity([velocity[0], -velocity[1], 0]);
     }
 
-    // Collision with paddles
+    // collsion check for the paddles
     const leftPaddle = scene.getObjectByName('leftPaddle');
     const rightPaddle = scene.getObjectByName('rightPaddle');
 
@@ -74,7 +75,7 @@ const Ball = ({ setLeftScore, setRightScore }) => {
       }
     }
 
-    // Scoring
+    // score function , setup score in the ui 
     if (ball.position.x > 9) {
       if (typeof setLeftScore === 'function') {
         setLeftScore(score => score + 1);

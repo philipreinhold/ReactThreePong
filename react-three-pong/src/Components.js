@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
+// a terrain from three.js libary which acts like a moving planet surface
 export const Terrain = () => {
   const terrain = useRef();
   const { clock } = useThree();
@@ -55,6 +56,7 @@ export const Terrain = () => {
   );
 };
 
+//background sun change positons and color if wanted in vector3 
 export const Sun = () => {
   return (
     <mesh position={[0, 15, -300]}>
@@ -88,6 +90,7 @@ export const GameBoundaries = () => {
   );
 };
 
+// this is also from three libary and should give the deep synthwave depth effect or force it
 export const PurpleFog = () => {
   const { scene } = useThree();
   
@@ -109,9 +112,9 @@ export const Stars = () => {
     const starMaterial = new THREE.PointsMaterial({ color: '#FFFFFF', size: 0.5 });
 
     const starVertices = [];
-    for (let i = 0; i < 20000; i++) {  // Increased the number of stars
-      const x = THREE.MathUtils.randFloatSpread(4000);  // More spread out
-      const y = THREE.MathUtils.randFloatSpread(2000);  // Slightly vertical spread
+    for (let i = 0; i < 20000; i++) {  // this doesn´t work right now - i tried different things but still work on this, should be the amount of stars on the map
+      const x = THREE.MathUtils.randFloatSpread(4000);  
+      const y = THREE.MathUtils.randFloatSpread(2000);  
       const z = THREE.MathUtils.randFloatSpread(4000);
       starVertices.push(x, y, z);
     }
@@ -131,7 +134,7 @@ export const OrbitingPlanet = ({ radius, speed, size, color, distance, yOffset }
     const time = clock.getElapsedTime() * speed;
     planetRef.current.position.set(
       Math.cos(time) * distance,
-      radius + yOffset,  // Adding an offset to vary the height of the planets
+      radius + yOffset,  
       Math.sin(time) * distance
     );
   });
@@ -139,7 +142,7 @@ export const OrbitingPlanet = ({ radius, speed, size, color, distance, yOffset }
   return (
     <mesh ref={planetRef}>
       <sphereGeometry args={[size, 32, 32]} />
-      <meshBasicMaterial color={color} wireframe={true} />  {/* Wireframe planet */}
+      <meshBasicMaterial color={color} wireframe={true} /> 
     </mesh>
   );
 };

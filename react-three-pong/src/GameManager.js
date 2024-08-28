@@ -5,6 +5,7 @@ const GameManager = ({ leftScore, rightScore, onRestart, gameActive, setGameActi
   const [gameState, setGameState] = useState('start');
   const [winner, setWinner] = useState(null);
 
+  // our UI or HUI to see the stats and score
   useEffect(() => {
     if (leftScore >= 11) {
       setGameState('gameOver');
@@ -29,7 +30,7 @@ const GameManager = ({ leftScore, rightScore, onRestart, gameActive, setGameActi
     setGameActive(false);
     onRestart();
   };
-
+// buttons for start and restart - css styleable
   const RetroButton = ({ onClick, children }) => (
     <button
       onClick={onClick}

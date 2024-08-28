@@ -28,7 +28,7 @@ const Paddle = ({ position, color, name, isPlayer }) => {
         paddle.position.y = Math.max(paddle.position.y - 0.15, -4);
       }
     } else {
-      // AI logic for the opponent paddle
+      // a ai like, or opponent game logic for the opponent paddle, inspired by three.js forum which simply follows the ball wih delay *0.05 and keeps the paddle in the boundaries of minus 4 and 4
       const ball = state.scene.getObjectByName('ball');
       if (ball && ball.position) {
         const targetY = ball.position.y;
@@ -37,7 +37,7 @@ const Paddle = ({ position, color, name, isPlayer }) => {
       }
     }
 
-    // Update wireframe position to match the paddle
+    // the outlines
     if (wireframe) {
       wireframe.position.copy(paddle.position);
     }
@@ -45,13 +45,11 @@ const Paddle = ({ position, color, name, isPlayer }) => {
 
   return (
     <group>
-      {/* Transparent filling */}
       <mesh ref={ref} position={position} name={name}>
         <boxGeometry args={[0.5, 2, 0.5]} />
         <meshBasicMaterial color={color} transparent={true} opacity={0.2} />
       </mesh>
 
-      {/* Distinct wireframe outlines */}
       <lineSegments ref={wireframeRef} geometry={wireframeGeometry} position={position}>
         <lineBasicMaterial color={color} linewidth={2} />
       </lineSegments>
