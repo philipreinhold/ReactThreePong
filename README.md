@@ -4,9 +4,9 @@ A minimalistic 3D Pong-inspired Web-game built with React and Three.js.
 
 ![Gameplay Screenshot](react-three-pong/src/assets/images/screenshots/gmscr1.png)
 
-## Video Demo ##
+## Video Demo
 
-[Your Video URL Here]  <!-- link folgt-->
+[Watch the Youtube Video / CS 50](https://youtu.be/okflGRyM2ZI)
 
 ## About ##
 
