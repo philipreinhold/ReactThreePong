@@ -4,8 +4,7 @@
    I'm a Millennial 8-) and fascinated by 80s Synthwave graphics. 
    I wanted to experiment with Three.js and React within these combinations. 
    This project is a bit of a playground for creating a minimalist game 
-   while exploring the interactive possibilities of the Three.js/React combo. Pong is just a starting point - 
-   I'm excited to dive deeper into React/Three/Fiber for future projects. It's a lot of fun experimenting with three and react!
+   while exploring the interactive possibilities of the Three.js/React combo. 
 */
 
 import React, { useState, useRef, useEffect } from 'react';
