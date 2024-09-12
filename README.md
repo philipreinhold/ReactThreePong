@@ -39,7 +39,6 @@ A minimalistic 3D Pong-inspired Web-game built with React and Three.js.
 - **src/App.js**: Put all main entry and logic in the App.js
 
 - **React Three Fibre Documentation** https://r3f.docs.pmnd.rs/getting-started/your-first-scene 
-- **O´Reilly / Javascript**: Book The Definitive Guide: Master the World's Most-Used Programming Language
 - https://discourse.threejs.org/ Three.js Documentation & Forum
   
 
